@@ -2073,3 +2073,15 @@ textarea:focus-visible {
         border-radius: 18px;
     }
 }
+
+/* Keep every progress bar aligned with the selected theme in every completion state. */
+.progress-fill.is-low,
+.progress-bar-fill.is-low,
+.progress-fill.is-medium,
+.progress-bar-fill.is-medium,
+.progress-fill.is-high,
+.progress-bar-fill.is-high,
+.progress-fill.is-complete,
+.progress-bar-fill.is-complete {
+    --progress-color: var(--color-primary);
+}
