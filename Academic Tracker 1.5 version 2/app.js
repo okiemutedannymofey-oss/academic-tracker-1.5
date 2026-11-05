@@ -1137,64 +1137,59 @@
 
     function updateTodayTasks() {
         const today = dayKey();
+        const date = dateFromKey(today);
+        const scheduledCourses = coursesForDate(date);
+        const isTimetableDay = Boolean(TIMETABLE[date.getDay()]);
+        const templates = [];
 
-        /*
-         * A date change clears the visible checklist and creates the new day's
-         * tasks. Completed activity remains in history for streak calculations.
-         */
-        if (state.taskDate !== today) {
-            state.taskDate = today;
-            state.tasks = [];
-
-            coursesForDate(dateFromKey(today)).forEach(course => {
-                state.tasks.push({
-                    id: makeId(),
-                    date: today,
+        if (isTimetableDay) {
+            /* Class days get exactly one recall task for each scheduled course. */
+            scheduledCourses.forEach(course => {
+                templates.push({
                     courseId: course.id,
                     type: "Recall",
-                    title: `Recall ${course.code}`,
-                    completed: false
-                });
-
-                state.tasks.push({
-                    id: makeId(),
-                    date: today,
-                    courseId: course.id,
-                    type: "Review",
-                    title: `Review one area of ${course.code}`,
-                    completed: false
+                    title: `Recall ${course.code}`
                 });
             });
-
-            saveState();
-            return;
+        } else {
+            /* No-class days review one rotating course with two short tasks. */
+            const course = scheduledCourses[0];
+            if (course) {
+                templates.push(
+                    { courseId: course.id, type: "Recall", title: `Recall ${course.code}` },
+                    { courseId: course.id, type: "Review", title: `Review one area of ${course.code}` }
+                );
+            }
         }
 
-        /* If course data changed today, add tasks for newly scheduled courses. */
-        const todayTasks = state.tasks.filter(task => task.date === today);
+        const currentTasks = state.tasks.filter(task => task.date === today);
+        const alreadyMatches = state.taskDate === today &&
+            currentTasks.length === templates.length &&
+            templates.every(template => currentTasks.some(task =>
+                task.courseId === template.courseId &&
+                task.type === template.type &&
+                task.title === template.title
+            ));
 
-        coursesForDate(dateFromKey(today)).forEach(course => {
-            const exists = todayTasks.some(task => task.courseId === course.id);
-            if (exists) return;
+        if (alreadyMatches) return;
 
-            state.tasks.push({
-                id: makeId(),
-                date: today,
-                courseId: course.id,
-                type: "Recall",
-                title: `Recall ${course.code}`,
-                completed: false
-            });
+        /* Keep the same task IDs and checked state for matching tasks. */
+        const updatedTasks = templates.map(template => {
+            const previous = currentTasks.find(task =>
+                task.courseId === template.courseId &&
+                task.type === template.type &&
+                task.title === template.title
+            );
 
-            state.tasks.push({
-                id: makeId(),
-                date: today,
-                courseId: course.id,
-                type: "Review",
-                title: `Review one area of ${course.code}`,
-                completed: false
-            });
+            return previous
+                ? { ...previous, ...template }
+                : { id: makeId(), date: today, ...template, completed: false };
         });
+
+        /* Preserve other dates and all activity history while fixing today's plan. */
+        state.tasks = state.tasks.filter(task => task.date !== today).concat(updatedTasks);
+        state.taskDate = today;
+        saveState();
     }
 
     function renderTodayTasks() {
@@ -2062,4 +2057,4 @@
     }
 
     start();
-})();
+})();Class days get exactly one recall task
