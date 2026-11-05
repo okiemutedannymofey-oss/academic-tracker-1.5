@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Page setup: character support, mobile scaling and search description. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="description"
+        content="Academic Tracker — Your personal academic space and study community."
+    >
+
+    <title>Academic Tracker 1.5</title>
+
+    <!-- Keep all visual styling in the separate CSS file. -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Main application wrapper. -->
+    <div class="app-container">
+
+        <!-- Side navigation: JavaScript uses the data-page values to switch sections. -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-logo" aria-hidden="true">AT</div>
+
+                <div class="brand-details">
+                    <h2>Academic Tracker</h2>
+                    <span>Version 1.5</span>
+                </div>
+            </div>
+
+            <nav class="main-navigation" aria-label="Main navigation">
+                <p class="navigation-heading">WORKSPACE</p>
+
+                <a href="#home" class="nav-link active" data-page="home">
+                    <span class="nav-icon" aria-hidden="true">⌂</span>
+                    <span>Home</span>
+                </a>
+
+                <a href="#courses" class="nav-link" data-page="courses">
+                    <span class="nav-icon" aria-hidden="true">▤</span>
+                    <span>My Courses</span>
+                </a>
+
+                <a href="#progress" class="nav-link" data-page="progress">
+                    <span class="nav-icon" aria-hidden="true">◷</span>
+                    <span>My Progress</span>
+                </a>
+
+                <p class="navigation-heading">COMMUNITY</p>
+
+                <a href="#study-group" class="nav-link" data-page="study-group">
+                    <span class="nav-icon" aria-hidden="true">♧</span>
+                    <span>Study Group</span>
+                </a>
+
+                <p class="navigation-heading">PERSONAL</p>
+
+                <a href="#achievements" class="nav-link" data-page="achievements">
+                    <span class="nav-icon" aria-hidden="true">☆</span>
+                    <span>Achievements</span>
+                </a>
+
+                <a href="#settings" class="nav-link" data-page="settings">
+                    <span class="nav-icon" aria-hidden="true">⚙</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <!-- Sidebar footer text. -->
+            <div class="sidebar-footer">
+                <p>Academic Tracker 1.5</p>
+                <span>Your progress, your journey.</span>
+            </div>
+        </aside>
+
+        <!-- Main content area for the selected application page. -->
+        <main class="main-content">
+            <!-- Top header with mobile menu, page title and profile summary. -->
+            <header class="top-header">
+                <button
+                    class="menu-toggle"
+                    id="menu-toggle"
+                    type="button"
+                    aria-label="Toggle navigation"
+                    aria-controls="sidebar"
+                    aria-expanded="false"
+                >
+                    ☰
+                </button>
+
+                <div class="page-heading">
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="page-subtitle">Welcome to your personal academic space.</p>
+                </div>
+
+                <div class="header-actions">
+                    <button
+                        class="icon-button"
+                        id="notification-button"
+                        type="button"
+                        aria-label="Notifications"
+                        title="Notifications"
+                    >
+                        ♧
+                    </button>
+
+                    <div class="profile-summary">
+                        <div class="profile-avatar" id="profile-avatar" aria-hidden="true">?</div>
+
+                        <div class="profile-information">
+                            <strong id="profile-name">Your Name</strong>
+                            <span id="profile-level">Academic Level</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page sections: JavaScript shows the section selected in the navigation. -->
+            <div class="page-container">
+
+                <!-- Home dashboard. -->
+                <section class="page-section active" id="home-page" aria-labelledby="page-title">
+                    <div class="welcome-section">
+                        <div>
+                            <p class="section-eyebrow">YOUR ACADEMIC JOURNEY</p>
+                            <h2>Welcome back, <span id="welcome-name">Student</span>.</h2>
+                            <p id="welcome-academic-context">
+                                Your academic journey starts here.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Summary statistics are filled using saved study data. -->
+                    <div class="statistics-grid">
+                        <article class="stat-card">
+                            <span class="stat-label">Study Streak</span>
+                            <h3 id="current-streak">0 Days</h3>
+                            <p>Your current consistency</p>
+                        </article>
+
+                        <article class="stat-card">
+                            <span class="stat-label">Study Sessions</span>
+                            <h3 id="total-sessions">0</h3>
+                            <p>Sessions recorded</p>
+                        </article>
+
+                        <article class="stat-card">
+                            <span class="stat-label">Completed Units</span>
+                            <h3 id="completed-units">0</h3>
+                            <p>Your academic progress</p>
+                        </article>
+
+                        <article class="stat-card">
+                            <span class="stat-label">Daily Target</span>
+                            <h3 id="daily-target">Not set</h3>
+                            <p>Your personal study goal</p>
+                        </article>
+                    </div>
+
+                    <!-- Dashboard cards for today's plan and the study group. -->
+                    <div class="dashboard-grid">
+                        <section class="content-card" aria-labelledby="today-plan-heading">
+                            <div class="card-heading">
+                                <div>
+                                    <h3 id="today-plan-heading">Today's Study Plan</h3>
+                                    <p>Your planned academic activities.</p>
+                                </div>
+
+                                <a href="#courses" data-page="courses">View courses</a>
+                            </div>
+
+                            <div id="today-tasks">
+                                <div class="empty-state">
+                                    <p>No study tasks added yet.</p>
+                                    <span>Your planned activities will appear here.</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="content-card group-preview" aria-labelledby="group-preview-heading">
+                            <div class="card-heading">
+                                <div>
+                                    <h3 id="group-preview-heading">CYB Brothers</h3>
+                                    <p>Your study community.</p>
+                                </div>
+
+                                <span class="group-status" id="group-status">Not joined</span>
+                            </div>
+
+                            <div id="group-preview-content">
+                                <div class="empty-state">
+                                    <p>You're studying independently.</p>
+                                    <span>You can explore a study group whenever you're ready.</span>
+                                    <button
+                                        class="primary-button"
+                                        id="join-group-button"
+                                        type="button"
+                                    >
+                                        Explore Study Group
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Recent study actions will appear here. -->
+                    <section class="content-card recent-activity" aria-labelledby="recent-activity-heading">
+                        <div class="card-heading">
+                            <div>
+                                <h3 id="recent-activity-heading">Recent Activity</h3>
+                                <p>Your latest academic activities.</p>
+                            </div>
+                        </div>
+
+                        <div id="recent-activity-list">
+                            <div class="empty-state">
+                                <p>No activity recorded yet.</p>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- Course list and course management area. -->
+                <section class="page-section" id="courses-page" aria-labelledby="courses-heading">
+                    <div class="section-header">
+                        <div>
+                            <h2 id="courses-heading">My Courses</h2>
+                            <p>Manage your courses, modules and units.</p>
+                            <p class="academic-context" id="courses-academic-context"></p>
+                        </div>
+
+                        <button class="primary-button" id="add-course-button" type="button">
+                            + Add Course
+                        </button>
+                    </div>
+
+                    <div id="courses-container">
+                        <div class="empty-state">
+                            <p>No courses added yet.</p>
+                            <span>Your courses will appear here.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Progress and academic activity area. -->
+                <section class="page-section" id="progress-page" aria-labelledby="progress-heading">
+                    <div class="section-header">
+                        <div>
+                            <h2 id="progress-heading">My Progress</h2>
+                            <p>Understand your academic development.</p>
+                        </div>
+                    </div>
+
+                    <div id="personal-progress-container"></div>
+                </section>
+
+                <!-- Study group area. Local browser data is not shared across devices. -->
+                <section class="page-section" id="study-group-page" aria-labelledby="study-group-heading">
+                    <div class="section-header">
+                        <div>
+                            <h2 id="study-group-heading">Study Group</h2>
+                            <p>Study together. Grow together.</p>
+                        </div>
+                    </div>
+
+                    <div id="study-group-container"></div>
+                </section>
+
+                <!-- Achievement milestones area. -->
+                <section class="page-section" id="achievements-page" aria-labelledby="achievements-heading">
+                    <div class="section-header">
+                        <div>
+                            <h2 id="achievements-heading">My Achievements</h2>
+                            <p>Celebrate your consistency and progress.</p>
+                        </div>
+                    </div>
+
+                    <div id="achievements-container"></div>
+                </section>
+
+                <!-- Profile, theme and appearance settings. -->
+                <section class="page-section" id="settings-page" aria-labelledby="settings-heading">
+                    <div class="section-header">
+                        <div>
+                            <h2 id="settings-heading">Settings</h2>
+                            <p>Personalise your Academic Tracker experience.</p>
+                        </div>
+                    </div>
+
+                    <section class="content-card" aria-labelledby="appearance-heading">
+                        <h3 id="appearance-heading">Appearance</h3>
+                        <p>Choose how your application looks.</p>
+
+                        <div class="setting-group">
+                            <label for="theme-select">Colour Theme</label>
+                            <select id="theme-select" name="theme">
+                                <option value="arctic-burgundy">Arctic Burgundy</option>
+                                <option value="ocean">Ocean</option>
+                                <option value="forest">Forest</option>
+                                <option value="black-crimson">Black Crimson</option>
+                                <option value="slate-violet">Slate Violet</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-group">
+                            <label for="appearance-mode">Appearance Mode</label>
+                            <select id="appearance-mode" name="appearance-mode">
+                                <option value="light">Light Mode</option>
+                                <option value="dark">Dark Mode</option>
+                                <option value="system">Follow Device</option>
+                            </select>
+                        </div>
+                    </section>
+
+                    <section class="content-card" aria-labelledby="profile-settings-heading">
+                        <h3 id="profile-settings-heading">Profile</h3>
+                        <p>Manage your personal and academic information.</p>
+                        <div id="profile-settings"></div>
+                    </section>
+                </section>
+            </div>
+
+            <!-- Footer credit requested by the project owner. -->
+            <footer class="app-footer">
+                <p>Built by Okiemute Daniel</p>
+                <span>Danny Mofey</span>
+                <span>Academic Tracker 1.5</span>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Keep application behavior in the separate JavaScript file. -->
+    <script src="app.js" defer></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Academic Tracker — Your personal academic space and study community.">
+    <title>Academic Tracker 1.5</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<div class="app-container">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-logo">AT</div>
+            <div class="brand-details">
+                <h2>Academic Tracker</h2>
+                <span>Version 1.5</span>
+            </div>
+        </div>
+
+        <nav class="main-navigation">
+            <p class="navigation-heading">WORKSPACE</p>
+
+            <a href="#home" class="nav-link active" data-page="home">
+                <span class="nav-icon">⌂</span><span>Home</span>
+            </a>
+            <a href="#courses" class="nav-link" data-page="courses">
+                <span class="nav-icon">▤</span><span>My Courses</span>
+            </a>
+            <a href="#progress" class="nav-link" data-page="progress">
+                <span class="nav-icon">◷</span><span>My Progress</span>
+            </a>
+
+            <p class="navigation-heading">COMMUNITY</p>
+            <a href="#study-group" class="nav-link" data-page="study-group">
+                <span class="nav-icon">♧</span><span>Study Group</span>
+            </a>
+
+            <p class="navigation-heading">PERSONAL</p>
+            <a href="#achievements" class="nav-link" data-page="achievements">
+                <span class="nav-icon">☆</span><span>Achievements</span>
+            </a>
+            <a href="#settings" class="nav-link" data-page="settings">
+                <span class="nav-icon">⚙</span><span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Academic Tracker 1.5</p>
+            <span>Your progress, your journey.</span>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+
+            <div class="page-heading">
+                <h1 id="page-title">Dashboard</h1>
+                <p id="page-subtitle">Welcome to your personal academic space.</p>
+            </div>
+
+            <div class="header-actions">
+                <button class="icon-button" id="notification-button" aria-label="Notifications">♧</button>
+
+                <div class="profile-summary">
+                    <div class="profile-avatar" id="profile-avatar">?</div>
+                    <div class="profile-information">
+                        <strong id="profile-name">Your Name</strong>
+                        <span id="profile-level">Academic Level</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-container">
+
+            <section class="page-section active" id="home-page">
+                <div class="welcome-section">
+                    <div>
+                        <p class="section-eyebrow">YOUR ACADEMIC JOURNEY</p>
+                        <h2>Welcome back, <span id="welcome-name">Student</span>.</h2>
+                        <p id="welcome-academic-context">Your academic journey starts here.</p>
+                    </div>
+                </div>
+
+                <div class="statistics-grid">
+                    <article class="stat-card">
+                        <span class="stat-label">Study Streak</span>
+                        <h3 id="current-streak">0 Days</h3>
+                        <p>Your current consistency</p>
+                    </article>
+                    <article class="stat-card">
+                        <span class="stat-label">Study Sessions</span>
+                        <h3 id="total-sessions">0</h3>
+                        <p>Sessions recorded</p>
+                    </article>
+                    <article class="stat-card">
+                        <span class="stat-label">Completed Units</span>
+                        <h3 id="completed-units">0</h3>
+                        <p>Your academic progress</p>
+                    </article>
+                    <article class="stat-card">
+                        <span class="stat-label">Daily Target</span>
+                        <h3 id="daily-target">Not set</h3>
+                        <p>Your personal study goal</p>
+                    </article>
+                </div>
+
+                <div class="dashboard-grid">
+                    <section class="content-card">
+                        <div class="card-heading">
+                            <div>
+                                <h3>Today's Study Plan</h3>
+                                <p>Your planned academic activities.</p>
+                            </div>
+                            <a href="#courses" data-page="courses">View courses</a>
+                        </div>
+                        <div id="today-tasks">
+                            <div class="empty-state">
+                                <p>No study tasks added yet.</p>
+                                <span>Your planned activities will appear here.</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="content-card group-preview">
+                        <div class="card-heading">
+                            <div>
+                                <h3>CYB Brothers</h3>
+                                <p>Your study community.</p>
+                            </div>
+                            <span class="group-status" id="group-status">Not joined</span>
+                        </div>
+                        <div id="group-preview-content">
+                            <div class="empty-state">
+                                <p>You're studying independently.</p>
+                                <span>You can explore a study group whenever you're ready.</span>
+                                <button class="primary-button" id="join-group-button">Explore Study Group</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <section class="content-card recent-activity">
+                    <div class="card-heading">
+                        <div>
+                            <h3>Recent Activity</h3>
+                            <p>Your latest academic activities.</p>
+                        </div>
+                    </div>
+                    <div id="recent-activity-list">
+                        <div class="empty-state"><p>No activity recorded yet.</p></div>
+                    </div>
+                </section>
+            </section>
+
+            <section class="page-section" id="courses-page">
+                <div class="section-header">
+                    <div>
+                        <h2>My Courses</h2>
+                        <p>Manage your courses, modules and units.</p>
+                        <p class="academic-context" id="courses-academic-context"></p>
+                    </div>
+                    <button class="primary-button" id="add-course-button">+ Add Course</button>
+                </div>
+                <div id="courses-container">
+                    <div class="empty-state">
+                        <p>No courses added yet.</p>
+                        <span>Your courses will appear here.</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section" id="progress-page">
+                <div class="section-header">
+                    <div>
+                        <h2>My Progress</h2>
+                        <p>Understand your academic development.</p>
+                    </div>
+                </div>
+                <div id="personal-progress-container"></div>
+            </section>
+
+            <section class="page-section" id="study-group-page">
+                <div class="section-header">
+                    <div>
+                        <h2>Study Group</h2>
+                        <p>Study together. Grow together.</p>
+                    </div>
+                </div>
+                <div id="study-group-container"></div>
+            </section>
+
+            <section class="page-section" id="achievements-page">
+                <div class="section-header">
+                    <div>
+                        <h2>My Achievements</h2>
+                        <p>Celebrate your consistency and progress.</p>
+                    </div>
+                </div>
+                <div id="achievements-container"></div>
+            </section>
+
+            <section class="page-section" id="settings-page">
+                <div class="section-header">
+                    <div>
+                        <h2>Settings</h2>
+                        <p>Personalise your Academic Tracker experience.</p>
+                    </div>
+                </div>
+
+                <section class="content-card">
+                    <h3>Appearance</h3>
+                    <p>Choose how your application looks.</p>
+
+                    <div class="setting-group">
+                        <label for="theme-select">Colour Theme</label>
+                        <select id="theme-select">
+                            <option value="arctic-burgundy">Arctic Burgundy</option>
+                            <option value="ocean">Ocean</option>
+                            <option value="forest">Forest</option>
+                            <option value="warm-earth">Warm Earth</option>
+                            <option value="slate-violet">Slate Violet</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="appearance-mode">Appearance Mode</label>
+                        <select id="appearance-mode">
+                            <option value="light">Light Mode</option>
+                            <option value="dark">Dark Mode</option>
+                            <option value="system">Follow Device</option>
+                        </select>
+                    </div>
+                </section>
+
+                <section class="content-card">
+                    <h3>Profile</h3>
+                    <p>Manage your personal and academic information.</p>
+                    <div id="profile-settings"></div>
+                </section>
+            </section>
+
+        </div>
+
+        <footer class="app-footer">
+            <p>Built by Okiemute Daniel</p>
+            <span>Danny Mofey</span>
+            <span>Academic Tracker 1.5</span>
+        </footer>
+    </main>
+</div>
+
+<script src="app.js" defer></script>
+</body>
+</html> -->
