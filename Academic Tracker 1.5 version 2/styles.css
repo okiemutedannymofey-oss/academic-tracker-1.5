@@ -2085,3 +2085,32 @@ textarea:focus-visible {
 .progress-bar-fill.is-complete {
     --progress-color: var(--color-primary);
 }
+
+/* Match the full phone canvas and safe areas to the selected theme. */
+html {
+    min-height: 100%;
+    background-color: var(--screen-background, #f5f3f4);
+}
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-color: var(--color-background, var(--screen-background, #f5f3f4));
+}
+.app-container {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+.top-header {
+    padding-top: calc(17px + env(safe-area-inset-top, 0px));
+}
+.sidebar {
+    padding-top: calc(27px + env(safe-area-inset-top, 0px));
+}
+@media (max-width: 720px) {
+    .top-header {
+        padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    }
+    .sidebar {
+        padding-top: calc(18px + env(safe-area-inset-top, 0px));
+    }
+}
