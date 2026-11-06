@@ -3,12 +3,12 @@
  * Network-first keeps the app current whenever the device is online.
  * The saved app shell is used when the network is unavailable.
  */
-const CACHE_NAME = "academic-tracker-v2-20261106-1";
+const CACHE_NAME = "academic-tracker-v15-20261106-2";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
-  "./app.js?v=20261106-pwa",
+  "./app.js?v=20261106-themechrome-crop",
   "./manifest.json",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
@@ -33,7 +33,7 @@ self.addEventListener("activate", event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
     await Promise.all(keys
-      .filter(key => key.startsWith("academic-tracker-v2-") && key !== CACHE_NAME)
+      .filter(key => (key.startsWith("academic-tracker-v2-") || key.startsWith("academic-tracker-v15-")) && key !== CACHE_NAME)
       .map(key => caches.delete(key)));
     await self.clients.claim();
   })());
