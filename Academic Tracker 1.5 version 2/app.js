@@ -2054,4 +2054,19 @@
     }
 
     start();
+
+    /* Register offline support after the page has loaded. */
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("./sw.js", { scope: "./" })
+                .then(registration => {
+                    registration.update();
+                    window.setInterval(
+                        () => registration.update(),
+                        6 * 60 * 60 * 1000
+                    );
+                })
+                .catch(error => console.error("Offline support could not start:", error));
+        });
+    }
 })();
