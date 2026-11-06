@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Academic Tracker 1.5",
+  "short_name": "Academic Tracker",
+  "description": "Your personal academic space and study community.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f3f4",
+  "theme_color": "#8d344e",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
