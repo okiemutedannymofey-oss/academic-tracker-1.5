@@ -256,6 +256,23 @@
 
         if (themeSelect) themeSelect.value = theme;
         if (modeSelect) modeSelect.value = mode;
+
+        // Keep the browser and installed-app chrome in sync with the selected surface.
+        const backgroundColor = getComputedStyle(document.body)
+            .getPropertyValue("--color-background").trim();
+        if (backgroundColor) {
+            const colorMeta = document.querySelector('meta[name="theme-color"]');
+            if (colorMeta) colorMeta.setAttribute("content", backgroundColor);
+            document.documentElement.style.setProperty("--screen-background", backgroundColor);
+            document.documentElement.style.backgroundColor = backgroundColor;
+            document.body.style.backgroundColor = backgroundColor;
+            if (window.parent !== window) {
+                window.parent.postMessage({
+                    source: "academic-tracker-15-theme",
+                    background: backgroundColor
+                }, location.origin);
+            }
+        }
     }
 
     function bindAppearance() {
@@ -304,6 +321,7 @@
         }));
     }
 
+    /* Prepare a square avatar crop that prioritises the face area in portrait photos. */
     function compressPicture(file) {
         return new Promise((resolve, reject) => {
             if (!file.type.startsWith("image/")) {
@@ -315,13 +333,15 @@
             const image = new Image();
 
             image.onload = () => {
-                const max = 320;
-                const ratio = Math.min(1, max / Math.max(image.width, image.height));
+                const side = Math.min(image.naturalWidth, image.naturalHeight);
+                const sourceX = (image.naturalWidth - side) / 2;
+                // Portrait photos commonly place the face above centre, so start the crop slightly high.
+                const sourceY = image.naturalHeight > image.naturalWidth
+                    ? Math.round((image.naturalHeight - side) * 0.18)
+                    : (image.naturalHeight - side) / 2;
                 const canvas = document.createElement("canvas");
-
-                canvas.width = Math.max(1, Math.round(image.width * ratio));
-                canvas.height = Math.max(1, Math.round(image.height * ratio));
-
+                canvas.width = 320;
+                canvas.height = 320;
                 const context = canvas.getContext("2d");
 
                 if (!context) {
@@ -330,9 +350,15 @@
                     return;
                 }
 
-                context.drawImage(image, 0, 0, canvas.width, canvas.height);
-                URL.revokeObjectURL(url);
-                resolve(canvas.toDataURL("image/jpeg", 0.82));
+                try {
+                    context.drawImage(image, sourceX, sourceY, side, side, 0, 0, 320, 320);
+                    const cropped = canvas.toDataURL("image/jpeg", 0.84);
+                    URL.revokeObjectURL(url);
+                    resolve(cropped);
+                } catch {
+                    URL.revokeObjectURL(url);
+                    reject(new Error("Could not process that image."));
+                }
             };
 
             image.onerror = () => {
@@ -363,7 +389,7 @@
                         <div class="form-field">
                             <label for="profile-picture">Profile picture</label>
                             <input id="profile-picture" type="file" accept="image/*">
-                            <small class="form-help">Saved in this browser only.</small>
+                            <small class="form-help">The photo is cropped to a square avatar and framed slightly high for a clearer face. Saved in this browser only.</small>
                             <button class="text-button" id="remove-picture" type="button">
                                 Remove picture
                             </button>
