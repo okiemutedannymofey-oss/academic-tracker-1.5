@@ -1157,7 +1157,7 @@
             if (course) {
                 templates.push(
                     { courseId: course.id, type: "Recall", title: `Recall ${course.code}` },
-                    { courseId: course.id, type: "Review", title: `Review an earlier topic in ${course.code}`, detail: "Short session: revisit something you have studied before to strengthen your understanding." }
+                    { courseId: null, type: "Review", title: `Review an earlier topic`, detail: "Short session: revisit a topic from any course you have studied before to strengthen your understanding." }
                 );
             }
         }
@@ -1173,7 +1173,7 @@
         /* Keep the same task IDs and checked state for matching tasks. */
         const updatedTasks = templates.map(template => {
             const previous = currentTasks.find(task =>
-                task.courseId === template.courseId &&
+                (template.type === "Review" || task.courseId === template.courseId) &&
                 task.type === template.type &&
                 task.type === template.type
             );
@@ -1221,7 +1221,7 @@
                             <span class="task-description">
                                 <strong>${escapeHTML(task.title)}</strong>
                                 <span class="task-course">
-                                    ${escapeHTML(course?.title || "Scheduled course")}
+                                    ${task.courseId ? escapeHTML(course?.title || "Scheduled course") : "Any course"}
                                     · ${escapeHTML(task.detail || (task.type === "Recall" ? "Active recall" : "Review"))}
                                 </span>
                             </span>
