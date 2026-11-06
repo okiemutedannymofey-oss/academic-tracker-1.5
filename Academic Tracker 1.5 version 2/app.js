@@ -1157,7 +1157,7 @@
             if (course) {
                 templates.push(
                     { courseId: course.id, type: "Recall", title: `Recall ${course.code}` },
-                    { courseId: course.id, type: "Review", title: `Review one area of ${course.code}` }
+                    { courseId: course.id, type: "Review", title: `Review an earlier topic in ${course.code}`, detail: "Short session: revisit something you have studied before to strengthen your understanding." }
                 );
             }
         }
@@ -1165,10 +1165,7 @@
         const currentTasks = state.tasks.filter(task => task.date === today);
         const alreadyMatches = state.taskDate === today &&
             currentTasks.length === templates.length &&
-            templates.every(template => currentTasks.some(task =>
-                task.courseId === template.courseId &&
-                task.type === template.type &&
-                task.title === template.title
+            templates.every(template => currentTasks.some(task => task.courseId === template.courseId && task.type === template.type && task.title === template.title
             ));
 
         if (alreadyMatches) return;
@@ -1178,7 +1175,7 @@
             const previous = currentTasks.find(task =>
                 task.courseId === template.courseId &&
                 task.type === template.type &&
-                task.title === template.title
+                task.type === template.type
             );
 
             return previous
@@ -1225,7 +1222,7 @@
                                 <strong>${escapeHTML(task.title)}</strong>
                                 <span class="task-course">
                                     ${escapeHTML(course?.title || "Scheduled course")}
-                                    · ${task.type === "Recall" ? "Active recall" : "Review"}
+                                    · ${escapeHTML(task.detail || (task.type === "Recall" ? "Active recall" : "Review"))}
                                 </span>
                             </span>
                             <span class="status-badge">${task.completed ? "Complete" : "To do"}</span>
