@@ -30,7 +30,13 @@ jobs:
       - name: Upload app folder
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "Academic Tracker 1.5 version 2"
+          path: |
+            index.html
+            styles.css
+            app.js
+            manifest.json
+            sw.js
+            icons/**
 
       - name: Deploy to GitHub Pages
         id: deployment
