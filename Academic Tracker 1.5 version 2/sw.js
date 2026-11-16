@@ -3,7 +3,7 @@
  * Network-first keeps the app current whenever the device is online.
  * The saved app shell is used when the network is unavailable.
  */
-const CACHE_NAME = "academic-tracker-v15-20261117-1";
+const CACHE_NAME = "academic-tracker-v15-20261117-2";
 const APP_SHELL = [
   "./",
   "./index.html",
