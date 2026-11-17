@@ -30,13 +30,7 @@ jobs:
       - name: Upload app folder
         uses: actions/upload-pages-artifact@v3
         with:
-          path: |
-            index.html
-            styles.css
-            app.js
-            manifest.json
-            sw.js
-            icons/**
+          path: "."
 
       - name: Deploy to GitHub Pages
         id: deployment
