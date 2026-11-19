@@ -1,30 +1,24 @@
 /*
  * Academic Tracker 1.5 offline support.
- * Network-first keeps the app current whenever the device is online.
- * The saved app shell is used when the network is unavailable.
+ * Save the complete app shell before activating so an installed app can open
+ * without a network connection after its first successful online visit.
  */
-const CACHE_NAME = "academic-tracker-v15-20261117-root";
+const CACHE_NAME = "academic-tracker-v15-20261119-offline-fix";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js?v=20261117-root",
   "./manifest.json",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icons/icon-1.5-192.png"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
-    await Promise.all(APP_SHELL.map(async path => {
-      try {
-        const response = await fetch(path, { cache: "reload" });
-        if (response.ok) await cache.put(path, response);
-      } catch (error) {
-        console.warn("Academic Tracker could not cache:", path, error);
-      }
-    }));
+    // addAll is deliberate: a missing app file must fail installation instead
+    // of silently leaving the user with an incomplete offline app.
+    await cache.addAll(APP_SHELL);
     await self.skipWaiting();
   })());
 });
@@ -49,12 +43,17 @@ self.addEventListener("fetch", event => {
     try {
       const response = await fetch(request, { cache: "no-cache" });
       if (response.ok) {
-        const cache = await caches.open(CACHE_NAME);
-        await cache.put(request, response.clone());
+        // A cache write failure should not prevent the online response.
+        try {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(request, response.clone());
+        } catch (error) {
+          console.warn("Academic Tracker could not update its offline cache:", error);
+        }
       }
       return response;
     } catch (error) {
-      const saved = await caches.match(request);
+      const saved = await caches.match(request, { ignoreSearch: true });
       if (saved) return saved;
       if (request.mode === "navigate") {
         return (await caches.match("./index.html")) || Response.error();
